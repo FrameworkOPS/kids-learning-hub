@@ -1,6 +1,6 @@
 import type { KidName } from '../types'
 
-const alexPrompts = [
+const williamPrompts = [
   'Write about a magical tree in your backyard.',
   'Describe your perfect day at the beach.',
   'What if you could talk to animals? Write a story.',
@@ -13,7 +13,7 @@ const alexPrompts = [
   'Tell a story about your best friend.',
 ]
 
-const mayaPrompts = [
+const cloverPrompts = [
   'Write about a future world where humans live underwater.',
   'Describe a scientific discovery that changed the world.',
   'If you could invent anything, what would it be and why?',
@@ -27,5 +27,5 @@ const mayaPrompts = [
 ]
 
 export function getPromptsForKid(kid: KidName): string[] {
-  return kid === 'Alex' ? alexPrompts : mayaPrompts
+  return kid === 'William' ? williamPrompts : cloverPrompts
 }

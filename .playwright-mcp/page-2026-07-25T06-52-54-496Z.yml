@@ -1,0 +1,21 @@
+- generic [ref=f1e139]:
+  - generic [ref=f1e140]:
+    - generic [ref=f1e141]: 🎓
+    - heading "Kids Learning Hub" [level=1] [ref=f1e142]
+    - paragraph [ref=f1e143]: Who is playing today?
+  - generic [ref=f1e144]:
+    - button "👦 William Age 7 Tap to Play!" [ref=f1e145] [cursor=pointer]:
+      - generic [ref=f1e148]:
+        - generic [ref=f1e149]: 👦
+        - generic [ref=f1e150]:
+          - heading "William" [level=2] [ref=f1e151]
+          - paragraph [ref=f1e152]: Age 7
+        - generic [ref=f1e153]: Tap to Play!
+    - button "👧 Clover Age 12 Tap to Play!" [ref=f1e154] [cursor=pointer]:
+      - generic [ref=f1e157]:
+        - generic [ref=f1e158]: 👧
+        - generic [ref=f1e159]:
+          - heading "Clover" [level=2] [ref=f1e160]
+          - paragraph [ref=f1e161]: Age 12
+        - generic [ref=f1e162]: Tap to Play!
+  - paragraph [ref=f1e163]: Learning is fun when it feels like play! 🌟

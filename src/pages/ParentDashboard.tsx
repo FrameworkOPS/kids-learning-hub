@@ -79,7 +79,7 @@ export default function ParentDashboard() {
   }
 
   const kidSummaries = useMemo(() => {
-    return (['Alex', 'Maya'] as KidName[]).map(kid => {
+    return (['William', 'Clover'] as KidName[]).map(kid => {
       const math = getMathStats(kid)
       const hw = getHandwritingStats(kid)
       const reading = getReadingStats(kid)

@@ -73,34 +73,59 @@ const defaultData: AppData = {
   readingAttempts: [],
   writingEntries: [],
   achievements: [],
-  mathMastery: { Alex: defaultMathMastery(), Maya: defaultMathMastery() },
-  readingMastery: { Alex: defaultReadingMastery(), Maya: defaultReadingMastery() },
-  handwritingMastery: { Alex: defaultHandwritingMastery(), Maya: defaultHandwritingMastery() },
-  dailyGoals: { Alex: defaultDailyGoal(getToday()), Maya: defaultDailyGoal(getToday()) },
+  mathMastery: { William: defaultMathMastery(), Clover: defaultMathMastery() },
+  readingMastery: { William: defaultReadingMastery(), Clover: defaultReadingMastery() },
+  handwritingMastery: { William: defaultHandwritingMastery(), Clover: defaultHandwritingMastery() },
+  dailyGoals: { William: defaultDailyGoal(getToday()), Clover: defaultDailyGoal(getToday()) },
   parentSettings: { pin: DEFAULT_PIN },
+}
+
+const OLD_TO_NEW_KID: Record<string, KidName> = {
+  Alex: 'William',
+  Maya: 'Clover',
+}
+
+function mapKid(kid: string): KidName {
+  return OLD_TO_NEW_KID[kid] || (kid as KidName)
 }
 
 function migrateData(stored: unknown): AppData {
   if (!stored || typeof stored !== 'object') return defaultData
   const prev = stored as Partial<AppData>
 
+  const mapItems = <T extends { kid: string }>(items: T[] | undefined): T[] => {
+    return (items || []).map(item => ({ ...item, kid: mapKid(item.kid) } as T))
+  }
+
+  const mapRecord = <T extends object>(
+    record: Record<string, T> | undefined
+  ): Record<KidName, T> => {
+    const result: Record<string, T> = {}
+    Object.entries(record || {}).forEach(([key, value]) => {
+      const newKey = mapKid(key)
+      result[newKey] = result[newKey] ? { ...result[newKey], ...value } : value
+    })
+    return result as Record<KidName, T>
+  }
+
+  const activeProfile = prev.activeProfile && (OLD_TO_NEW_KID[prev.activeProfile] || ['William', 'Clover'].includes(prev.activeProfile))
+    ? mapKid(prev.activeProfile)
+    : null
+
   const migrated: AppData = {
     ...defaultData,
     ...prev,
     version: DATA_VERSION,
-    mathMastery: {
-      Alex: { ...defaultMathMastery(), ...(prev.mathMastery?.Alex || {}) },
-      Maya: { ...defaultMathMastery(), ...(prev.mathMastery?.Maya || {}) },
-    },
-    readingMastery: {
-      Alex: { ...defaultReadingMastery(), ...(prev.readingMastery?.Alex || {}) },
-      Maya: { ...defaultReadingMastery(), ...(prev.readingMastery?.Maya || {}) },
-    },
-    handwritingMastery: {
-      Alex: { ...defaultHandwritingMastery(), ...(prev.handwritingMastery?.Alex || {}) },
-      Maya: { ...defaultHandwritingMastery(), ...(prev.handwritingMastery?.Maya || {}) },
-    },
-    dailyGoals: prev.dailyGoals || defaultData.dailyGoals,
+    activeProfile,
+    mathAttempts: mapItems(prev.mathAttempts || []),
+    handwritingAttempts: mapItems(prev.handwritingAttempts || []),
+    readingAttempts: mapItems(prev.readingAttempts || []),
+    writingEntries: mapItems(prev.writingEntries || []),
+    achievements: mapItems(prev.achievements || []),
+    mathMastery: mapRecord(prev.mathMastery),
+    readingMastery: mapRecord(prev.readingMastery),
+    handwritingMastery: mapRecord(prev.handwritingMastery),
+    dailyGoals: mapRecord(prev.dailyGoals),
     parentSettings: prev.parentSettings || defaultData.parentSettings,
   }
 

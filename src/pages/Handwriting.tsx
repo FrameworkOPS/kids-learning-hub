@@ -40,7 +40,7 @@ export default function Handwriting() {
   const [history, setHistory] = useState<ImageData[]>([])
 
   const items = useMemo(() => {
-    const pool = activeProfile === 'Alex'
+    const pool = activeProfile === 'William'
       ? mode === 'letters' ? ALEX_LETTERS : mode === 'numbers' ? ALEX_NUMBERS : ALEX_WORDS
       : mode === 'letters' ? MAYA_LETTERS : mode === 'numbers' ? MAYA_NUMBERS : MAYA_WORDS
     return pool

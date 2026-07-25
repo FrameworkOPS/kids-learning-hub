@@ -1,6 +1,6 @@
 import type { ReadingPassage, KidName } from '../types'
 
-const alexPassages: ReadingPassage[] = [
+const williamPassages: ReadingPassage[] = [
   {
     id: 'alex-1',
     title: 'The Red Balloon',
@@ -26,7 +26,7 @@ const alexPassages: ReadingPassage[] = [
         correctIndex: 1,
       },
     ],
-    kid: 'Alex',
+    kid: 'William',
     difficulty: 1,
   },
   {
@@ -54,7 +54,7 @@ const alexPassages: ReadingPassage[] = [
         correctIndex: 0,
       },
     ],
-    kid: 'Alex',
+    kid: 'William',
     difficulty: 1,
   },
   {
@@ -82,7 +82,7 @@ const alexPassages: ReadingPassage[] = [
         correctIndex: 2,
       },
     ],
-    kid: 'Alex',
+    kid: 'William',
     difficulty: 2,
   },
   {
@@ -110,7 +110,7 @@ const alexPassages: ReadingPassage[] = [
         correctIndex: 2,
       },
     ],
-    kid: 'Alex',
+    kid: 'William',
     difficulty: 2,
   },
   {
@@ -138,12 +138,12 @@ const alexPassages: ReadingPassage[] = [
         correctIndex: 1,
       },
     ],
-    kid: 'Alex',
+    kid: 'William',
     difficulty: 3,
   },
 ]
 
-const mayaPassages: ReadingPassage[] = [
+const cloverPassages: ReadingPassage[] = [
   {
     id: 'maya-1',
     title: 'The Invention of the Telephone',
@@ -179,7 +179,7 @@ const mayaPassages: ReadingPassage[] = [
         correctIndex: 1,
       },
     ],
-    kid: 'Maya',
+    kid: 'Clover',
     difficulty: 1,
   },
   {
@@ -212,7 +212,7 @@ const mayaPassages: ReadingPassage[] = [
         correctIndex: 1,
       },
     ],
-    kid: 'Maya',
+    kid: 'Clover',
     difficulty: 1,
   },
   {
@@ -245,7 +245,7 @@ const mayaPassages: ReadingPassage[] = [
         correctIndex: 1,
       },
     ],
-    kid: 'Maya',
+    kid: 'Clover',
     difficulty: 2,
   },
   {
@@ -283,15 +283,15 @@ const mayaPassages: ReadingPassage[] = [
         correctIndex: 1,
       },
     ],
-    kid: 'Maya',
+    kid: 'Clover',
     difficulty: 3,
   },
 ]
 
 export function getPassagesForKid(kid: KidName): ReadingPassage[] {
-  return kid === 'Alex' ? alexPassages : mayaPassages
+  return kid === 'William' ? williamPassages : cloverPassages
 }
 
 export function getPassageById(id: string): ReadingPassage | undefined {
-  return [...alexPassages, ...mayaPassages].find(p => p.id === id)
+  return [...williamPassages, ...cloverPassages].find(p => p.id === id)
 }

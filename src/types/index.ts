@@ -1,5 +1,5 @@
 // ===== Kid Profile =====
-export type KidName = 'Alex' | 'Maya'
+export type KidName = 'William' | 'Clover'
 
 export interface KidProfile {
   name: KidName
@@ -10,8 +10,8 @@ export interface KidProfile {
 }
 
 export const PROFILES: Record<KidName, KidProfile> = {
-  Alex: { name: 'Alex', age: 7, gender: 'boy', avatar: '👦', color: 'bg-sky-400' },
-  Maya: { name: 'Maya', age: 12, gender: 'girl', avatar: '👧', color: 'bg-rose-400' },
+  William: { name: 'William', age: 7, gender: 'boy', avatar: '👦', color: 'bg-sky-400' },
+  Clover: { name: 'Clover', age: 12, gender: 'girl', avatar: '👧', color: 'bg-rose-400' },
 }
 
 // ===== Math =====

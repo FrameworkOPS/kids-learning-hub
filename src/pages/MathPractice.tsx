@@ -9,7 +9,7 @@ import Confetti from '../components/Confetti'
 const OPERATION_ORDER: MathOperation[] = ['addition', 'subtraction', 'multiplication', 'division', 'fractions', 'decimals']
 
 function maxDifficultyForKid(kid: KidName, mastery: Record<MathOperation, { total: number; correct: number; unlocked: boolean }>) {
-  if (kid === 'Alex') {
+  if (kid === 'William') {
     if (mastery.addition.unlocked) return 2
     return 1
   }

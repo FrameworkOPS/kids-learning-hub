@@ -14,13 +14,13 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export function generateMathProblem(kid: KidName, difficulty: number): MathProblem {
-  if (kid === 'Alex') {
-    return generateAlexProblem(difficulty)
+  if (kid === 'William') {
+    return generateWilliamProblem(difficulty)
   }
-  return generateMayaProblem(difficulty)
+  return generateCloverProblem(difficulty)
 }
 
-function generateAlexProblem(difficulty: number): MathProblem {
+function generateWilliamProblem(difficulty: number): MathProblem {
   const ops: MathOperation[] = difficulty <= 1 ? ['addition'] : difficulty <= 2 ? ['addition', 'subtraction'] : ['addition', 'subtraction']
   const op = ops[rand(0, ops.length - 1)]
   const id = `math-${Date.now()}-${rand(1000, 9999)}`
@@ -51,7 +51,7 @@ function generateAlexProblem(difficulty: number): MathProblem {
   }
 }
 
-function generateMayaProblem(difficulty: number): MathProblem {
+function generateCloverProblem(difficulty: number): MathProblem {
   const ops: MathOperation[] =
     difficulty <= 1
       ? ['multiplication']

@@ -1,0 +1,70 @@
+- generic [ref=f1e165]:
+  - banner [ref=f1e166]:
+    - generic [ref=f1e167]:
+      - link "K Kids Learning Hub" [ref=f1e168] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f1e169]: K
+        - generic [ref=f1e170]: Kids Learning Hub
+      - generic [ref=f1e171]:
+        - link "Parent Corner" [ref=f1e172] [cursor=pointer]:
+          - /url: /parent
+        - button "👦 William" [ref=f1e176] [cursor=pointer]:
+          - generic [ref=f1e177]: 👦
+          - generic [ref=f1e178]: William
+  - main [ref=f1e191]:
+    - generic [ref=f1e192]:
+      - generic [ref=f1e193]:
+        - heading "Hi, William! 👦" [level=1] [ref=f1e194]:
+          - text: Hi, William!
+          - generic [ref=f1e195]: 👦
+        - paragraph [ref=f1e196]: Ready to learn something new today?
+      - generic [ref=f1e197]:
+        - generic [ref=f1e198]:
+          - generic [ref=f1e199]: Level
+          - generic [ref=f1e200]: "1"
+          - generic [ref=f1e201]: Keep going to level up!
+        - generic [ref=f1e204]:
+          - generic [ref=f1e205]: Daily Goal
+          - generic [ref=f1e211]: 0%
+          - paragraph [ref=f1e213]: Practice 5 activities today!
+      - generic [ref=f1e214]:
+        - generic [ref=f1e215]:
+          - generic [ref=f1e218]: "0"
+          - generic [ref=f1e219]: Problems Today
+        - generic [ref=f1e220]:
+          - generic [ref=f1e223]: "0"
+          - generic [ref=f1e224]: Streak
+        - generic [ref=f1e225]:
+          - generic [ref=f1e228]: "0"
+          - generic [ref=f1e229]: Stars
+      - generic [ref=f1e230]:
+        - heading "Choose a Game" [level=2] [ref=f1e231]
+        - link [ref=f1e233] [cursor=pointer]:
+          - /url: /math
+          - generic [ref=f1e237]:
+            - heading "Math Practice" [level=3] [ref=f1e238]
+            - paragraph [ref=f1e239]: Tap to start playing!
+        - link [ref=f1e244] [cursor=pointer]:
+          - /url: /handwriting
+          - generic [ref=f1e248]:
+            - heading "Handwriting" [level=3] [ref=f1e249]
+            - paragraph [ref=f1e250]: Tap to start playing!
+        - link [ref=f1e255] [cursor=pointer]:
+          - /url: /reading
+          - generic [ref=f1e259]:
+            - heading "Reading & Writing" [level=3] [ref=f1e260]
+            - paragraph [ref=f1e261]: Tap to start playing!
+      - link "View My Progress" [ref=f1e266] [cursor=pointer]:
+        - /url: /reports
+  - navigation [ref=f1e273]:
+    - generic [ref=f1e275]:
+      - link "Home" [ref=f1e276] [cursor=pointer]:
+        - /url: /
+      - link "Math" [ref=f1e282] [cursor=pointer]:
+        - /url: /math
+      - link "Write" [ref=f1e286] [cursor=pointer]:
+        - /url: /handwriting
+      - link "Read" [ref=f1e290] [cursor=pointer]:
+        - /url: /reading
+      - link "Reports" [ref=f1e294] [cursor=pointer]:
+        - /url: /reports
