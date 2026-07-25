@@ -51,12 +51,15 @@ export interface HandwritingAttempt {
 }
 
 // ===== Reading =====
+export type ReadingDifficulty = 1 | 2 | 3
+
 export interface ReadingPassage {
   id: string
   title: string
   content: string
   questions: ReadingQuestion[]
   kid: KidName
+  difficulty: ReadingDifficulty
 }
 
 export interface ReadingQuestion {
@@ -82,6 +85,28 @@ export interface WritingEntry {
   wordCount: number
   timestamp: string
   kid: KidName
+}
+
+// ===== Progress & Mastery =====
+export interface MasteryRecord {
+  total: number
+  correct: number
+  consecutiveCorrect: number
+  unlocked: boolean
+}
+
+export interface MathMastery {
+  byOperation: Record<MathOperation, MasteryRecord>
+}
+
+export interface ReadingMastery {
+  byPassage: Record<string, MasteryRecord>
+  currentLevel: ReadingDifficulty
+}
+
+export interface HandwritingMastery {
+  byTarget: Record<string, MasteryRecord>
+  currentMode: HandwritingMode
 }
 
 // ===== App State =====
@@ -111,4 +136,31 @@ export interface Achievement {
   icon: string
   unlockedAt: string
   kid: KidName
+}
+
+export interface DailyGoal {
+  date: string
+  mathProblems: number
+  handwritingStars: number
+  readingPassages: number
+  writingEntries: number
+}
+
+export interface ParentSettings {
+  pin: string
+}
+
+export interface AppData {
+  version: number
+  activeProfile: KidName | null
+  mathAttempts: MathAttempt[]
+  handwritingAttempts: HandwritingAttempt[]
+  readingAttempts: ReadingAttempt[]
+  writingEntries: WritingEntry[]
+  achievements: Achievement[]
+  mathMastery: Record<KidName, MathMastery>
+  readingMastery: Record<KidName, ReadingMastery>
+  handwritingMastery: Record<KidName, HandwritingMastery>
+  dailyGoals: Record<KidName, DailyGoal>
+  parentSettings: ParentSettings
 }

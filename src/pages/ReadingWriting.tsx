@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { BookOpen, PenLine, CheckCircle2, XCircle, ChevronRight, Save, FileText } from 'lucide-react'
 import { useKidProfile } from '../hooks/useKidProfile'
@@ -9,46 +9,47 @@ import { getPromptsForKid } from '../data/prompts'
 import Confetti from '../components/Confetti'
 
 export default function ReadingWriting() {
-  const { activeProfile } = useKidProfile()
+  const { activeProfile, getReadingMastery } = useKidProfile()
   const profile = activeProfile ? PROFILES[activeProfile as KidName] : null
+  const readingMastery = activeProfile ? getReadingMastery(activeProfile) : null
   const [tab, setTab] = useState<'reading' | 'writing'>('reading')
 
   if (!profile) return null
 
   return (
-    <div className="space-y-4 max-w-lg mx-auto">
-      <div className="flex items-center gap-3">
-        <div className={`w-10 h-10 rounded-xl ${profile.color} flex items-center justify-center text-white text-xl`}>
+    <div className="space-y-6 max-w-2xl mx-auto">
+      <div className="flex items-center gap-4">
+        <div className={`w-14 h-14 rounded-2xl ${profile.color} flex items-center justify-center text-white text-2xl`}>
           {profile.avatar}
         </div>
         <div>
-          <h1 className="font-bold text-gray-800">Reading & Writing</h1>
-          <p className="text-xs text-gray-500">Read stories and write your own</p>
+          <h1 className="font-bold text-2xl text-gray-800">Reading & Writing</h1>
+          <p className="text-sm text-gray-500">Read stories and write your own</p>
         </div>
       </div>
 
-      <div className="flex gap-2 bg-gray-100 p-1 rounded-xl">
+      <div className="flex gap-2 bg-gray-100 p-1.5 rounded-2xl">
         <button
           onClick={() => setTab('reading')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+          className={`flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-base font-bold transition-colors ${
             tab === 'reading' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <BookOpen className="w-4 h-4" /> Reading
+          <BookOpen className="w-5 h-5" /> Reading
         </button>
         <button
           onClick={() => setTab('writing')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+          className={`flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-base font-bold transition-colors ${
             tab === 'writing' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <PenLine className="w-4 h-4" /> Writing
+          <PenLine className="w-5 h-5" /> Writing
         </button>
       </div>
 
       <AnimatePresence mode="wait">
         {tab === 'reading' ? (
-          <ReadingSection key="reading" profile={profile} activeProfile={activeProfile as KidName} />
+          <ReadingSection key="reading" activeProfile={activeProfile as KidName} readingMastery={readingMastery!} />
         ) : (
           <WritingSection key="writing" profile={profile} activeProfile={activeProfile as KidName} />
         )}
@@ -57,15 +58,16 @@ export default function ReadingWriting() {
   )
 }
 
-function ReadingSection({ activeProfile }: { profile: KidProfile; activeProfile: KidName }) {
+function ReadingSection({ activeProfile, readingMastery }: { activeProfile: KidName; readingMastery: { currentLevel: number; byPassage: Record<string, { total: number; correct: number; unlocked: boolean }> } }) {
   const { addReadingAttempt, addAchievement } = useKidProfile()
-  const passages = getPassagesForKid(activeProfile)
+  const allPassages = getPassagesForKid(activeProfile)
+  const unlockedPassages = allPassages.filter(p => p.difficulty <= readingMastery.currentLevel)
   const [idx, setIdx] = useState(0)
   const [answers, setAnswers] = useState<number[]>([])
   const [submitted, setSubmitted] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
 
-  const passage = passages[idx]
+  const passage = unlockedPassages[idx % unlockedPassages.length]
 
   const handleAnswer = (qIdx: number, choiceIdx: number) => {
     if (submitted) return
@@ -102,36 +104,38 @@ function ReadingSection({ activeProfile }: { profile: KidProfile; activeProfile:
     }
   }
 
-  const nextPassage = useCallback(() => {
-    setIdx(i => (i + 1) % passages.length)
+  const nextPassage = () => {
+    setIdx(i => (i + 1) % unlockedPassages.length)
     setAnswers([])
     setSubmitted(false)
     setShowConfetti(false)
-  }, [passages.length])
+  }
+
+  if (!passage) return null
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <Confetti active={showConfetti} onDone={() => setShowConfetti(false)} />
 
       <motion.div
         key={passage.id}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100"
+        className="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xl border border-gray-100"
       >
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-gray-800">{passage.title}</h2>
-          <span className="text-xs font-bold text-purple-500 bg-purple-50 px-2 py-1 rounded-lg">
-            {idx + 1}/{passages.length}
+          <h2 className="text-2xl font-bold text-gray-800">{passage.title}</h2>
+          <span className="text-sm font-bold text-purple-500 bg-purple-50 px-3 py-1.5 rounded-xl">
+            {idx + 1}/{unlockedPassages.length}
           </span>
         </div>
-        <p className="text-gray-700 leading-relaxed text-sm mb-6">{passage.content}</p>
+        <p className="text-gray-700 leading-relaxed text-lg mb-8">{passage.content}</p>
 
-        <div className="space-y-5">
+        <div className="space-y-6">
           {passage.questions.map((q, qi) => (
             <div key={q.id}>
-              <p className="font-semibold text-gray-800 text-sm mb-2">{qi + 1}. {q.question}</p>
-              <div className="space-y-2">
+              <p className="font-bold text-gray-800 text-lg mb-3">{qi + 1}. {q.question}</p>
+              <div className="space-y-3">
                 {q.choices.map((choice, ci) => {
                   let cls = 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-purple-50'
                   if (submitted) {
@@ -146,7 +150,7 @@ function ReadingSection({ activeProfile }: { profile: KidProfile; activeProfile:
                       key={ci}
                       onClick={() => handleAnswer(qi, ci)}
                       disabled={submitted}
-                      className={`w-full text-left px-4 py-2.5 rounded-xl border-2 text-sm font-medium transition-colors ${cls}`}
+                      className={`w-full text-left px-5 py-4 rounded-2xl border-2 text-base font-bold transition-colors ${cls}`}
                     >
                       {choice}
                     </button>
@@ -161,7 +165,7 @@ function ReadingSection({ activeProfile }: { profile: KidProfile; activeProfile:
           <button
             onClick={submit}
             disabled={answers.length < passage.questions.length}
-            className="mt-6 w-full py-3 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 disabled:opacity-50"
+            className="mt-8 w-full py-4 bg-purple-600 text-white rounded-2xl font-bold text-lg hover:bg-purple-700 disabled:opacity-50"
           >
             Submit Answers
           </button>
@@ -169,25 +173,25 @@ function ReadingSection({ activeProfile }: { profile: KidProfile; activeProfile:
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-6 text-center"
+            className="mt-8 text-center"
           >
-            <div className="flex items-center justify-center gap-2 mb-2">
+            <div className="flex items-center justify-center gap-2 mb-3">
               {passage.questions.map((q, i) => (
                 answers[i] === q.correctIndex ? (
-                  <CheckCircle2 key={i} className="w-6 h-6 text-green-500" />
+                  <CheckCircle2 key={i} className="w-8 h-8 text-green-500" />
                 ) : (
-                  <XCircle key={i} className="w-6 h-6 text-red-400" />
+                  <XCircle key={i} className="w-8 h-8 text-red-400" />
                 )
               ))}
             </div>
-            <p className="text-lg font-bold text-gray-800">
+            <p className="text-2xl font-bold text-gray-800">
               Score: {passage.questions.reduce((sum, q, i) => sum + (answers[i] === q.correctIndex ? 1 : 0), 0)}/{passage.questions.length}
             </p>
             <button
               onClick={nextPassage}
-              className="mt-3 px-6 py-2.5 bg-green-500 text-white rounded-xl font-semibold hover:bg-green-600 inline-flex items-center gap-2"
+              className="mt-4 px-8 py-3.5 bg-green-500 text-white rounded-2xl font-bold text-lg hover:bg-green-600 inline-flex items-center gap-2"
             >
-              Next Story <ChevronRight className="w-4 h-4" />
+              Next Story <ChevronRight className="w-5 h-5" />
             </button>
           </motion.div>
         )}
@@ -226,57 +230,57 @@ function WritingSection({ activeProfile }: { profile: KidProfile; activeProfile:
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-6 border border-amber-100"
+        className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-[2rem] p-6 sm:p-8 border border-amber-100"
       >
         <div className="flex items-center gap-2 mb-3">
-          <PenLine className="w-5 h-5 text-amber-600" />
-          <h2 className="font-bold text-gray-800">Writing Prompt</h2>
+          <PenLine className="w-6 h-6 text-amber-600" />
+          <h2 className="font-bold text-xl text-gray-800">Writing Prompt</h2>
         </div>
-        <p className="text-gray-700 text-lg font-medium">{currentPrompt}</p>
+        <p className="text-gray-700 text-xl font-medium leading-relaxed">{currentPrompt}</p>
         <button
           onClick={() => setPromptIdx(i => (i + 1) % prompts.length)}
-          className="mt-3 text-sm text-purple-600 font-semibold hover:underline"
+          className="mt-4 text-base text-purple-600 font-bold hover:underline"
         >
           Get a new prompt
         </button>
       </motion.div>
 
-      <div className="bg-white rounded-3xl p-4 shadow-lg border border-gray-100">
+      <div className="bg-white rounded-[2rem] p-5 sm:p-6 shadow-xl border border-gray-100">
         <textarea
           value={content}
           onChange={e => setContent(e.target.value)}
           placeholder="Start writing here..."
-          className="w-full h-48 p-4 rounded-2xl bg-gray-50 border-2 border-gray-100 focus:border-purple-300 focus:outline-none resize-none text-gray-700 leading-relaxed"
+          className="w-full h-56 sm:h-64 p-5 rounded-2xl bg-gray-50 border-2 border-gray-100 focus:border-purple-300 focus:outline-none resize-none text-lg text-gray-700 leading-relaxed"
         />
-        <div className="flex items-center justify-between mt-3">
-          <span className="text-sm text-gray-500 font-medium">{wordCount} words</span>
+        <div className="flex items-center justify-between mt-4">
+          <span className="text-base text-gray-500 font-bold">{wordCount} words</span>
           <button
             onClick={saveEntry}
             disabled={!content.trim() || saved}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-colors ${
+            className={`flex items-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-base transition-colors ${
               saved ? 'bg-green-500 text-white' : 'bg-purple-600 text-white hover:bg-purple-700'
             }`}
           >
-            {saved ? <CheckCircle2 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
+            {saved ? <CheckCircle2 className="w-5 h-5" /> : <Save className="w-5 h-5" />}
             {saved ? 'Saved!' : 'Save Entry'}
           </button>
         </div>
       </div>
 
       {entries.length > 0 && (
-        <div className="space-y-3">
-          <h3 className="font-bold text-gray-700 flex items-center gap-2">
-            <FileText className="w-4 h-4" /> Recent Entries
+        <div className="space-y-4">
+          <h3 className="font-bold text-gray-700 flex items-center gap-2 text-lg">
+            <FileText className="w-5 h-5" /> Recent Entries
           </h3>
           {entries.slice(-3).map(entry => (
-            <div key={entry.id} className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-              <p className="text-xs text-gray-400 mb-1">{entry.timestamp.slice(0, 10)} • {entry.wordCount} words</p>
-              <p className="text-sm font-semibold text-gray-700 mb-1">{entry.prompt}</p>
-              <p className="text-sm text-gray-500 line-clamp-3">{entry.content}</p>
+            <div key={entry.id} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+              <p className="text-sm text-gray-400 mb-1 font-medium">{entry.timestamp.slice(0, 10)} • {entry.wordCount} words</p>
+              <p className="text-base font-bold text-gray-700 mb-1">{entry.prompt}</p>
+              <p className="text-base text-gray-500 line-clamp-3">{entry.content}</p>
             </div>
           ))}
         </div>

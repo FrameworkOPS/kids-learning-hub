@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, Calculator, Pen, BookOpen, BarChart3, UserCog } from 'lucide-react'
+import { Home, Calculator, Pen, BookOpen, BarChart3, UserCog, Lock } from 'lucide-react'
 import { useKidProfile } from '../hooks/useKidProfile'
 import { PROFILES } from '../types'
 import type { ReactNode } from 'react'
@@ -25,66 +25,78 @@ export default function Layout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-purple-50 to-orange-50">
-      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-purple-100 shadow-sm">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg shadow-md">
-              K
-            </div>
-            <span className="font-bold text-xl bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent hidden sm:block">
-              Kids Learning Hub
-            </span>
-          </Link>
+    <div className="min-h-screen bg-gradient-to-br from-sky-100 via-purple-100 to-orange-100">
+      <div className="max-w-3xl mx-auto min-h-screen bg-white/60 backdrop-blur-sm shadow-2xl shadow-purple-100/50">
+        <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-purple-100 shadow-sm">
+          <div className="px-4 sm:px-6 py-4 flex items-center justify-between">
+            <Link to="/" className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-2xl shadow-md">
+                K
+              </div>
+              <span className="font-bold text-2xl bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent hidden sm:block">
+                Kids Learning Hub
+              </span>
+            </Link>
 
-          {profile && (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleSwitch}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-full ${profile.color} text-white shadow-md`}
-            >
-              <span className="text-xl">{profile.avatar}</span>
-              <span className="font-semibold text-sm">{profile.name}</span>
-              <UserCog className="w-4 h-4 ml-1" />
-            </motion.button>
-          )}
-        </div>
-      </header>
+            <div className="flex items-center gap-3">
+              <Link
+                to="/parent"
+                className="p-3 rounded-xl bg-gray-100 text-gray-500 hover:bg-purple-100 hover:text-purple-600 transition-colors"
+                title="Parent Corner"
+              >
+                <Lock className="w-6 h-6" />
+              </Link>
 
-      <main className="max-w-5xl mx-auto px-4 py-6 pb-28">{children}</main>
-
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-lg border-t border-purple-100 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
-        <div className="max-w-5xl mx-auto px-2">
-          <div className="flex justify-around items-center py-2">
-            {navItems.map(item => {
-              const Icon = item.icon
-              const isActive = location.pathname === item.path
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors ${
-                    isActive ? 'text-purple-600' : 'text-gray-400 hover:text-gray-600'
-                  }`}
+              {profile && (
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleSwitch}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-full ${profile.color} text-white shadow-md`}
                 >
-                  <AnimatePresence>
-                    {isActive && (
-                      <motion.div
-                        layoutId="nav-indicator"
-                        className="absolute inset-0 bg-purple-50 rounded-xl"
-                        transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
-                      />
-                    )}
-                  </AnimatePresence>
-                  <Icon className="w-5 h-5 relative z-10" />
-                  <span className="text-[10px] font-medium relative z-10">{item.label}</span>
-                </Link>
-              )
-            })}
+                  <span className="text-2xl">{profile.avatar}</span>
+                  <span className="font-semibold text-base">{profile.name}</span>
+                  <UserCog className="w-5 h-5 ml-1" />
+                </motion.button>
+              )}
+            </div>
           </div>
-        </div>
-      </nav>
+        </header>
+
+        <main className="px-4 sm:px-6 py-6 pb-32">{children}</main>
+
+        <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-purple-100 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]">
+          <div className="max-w-3xl mx-auto">
+            <div className="flex justify-around items-center py-3">
+              {navItems.map(item => {
+                const Icon = item.icon
+                const isActive = location.pathname === item.path
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`relative flex flex-col items-center gap-1 px-4 py-2 rounded-2xl transition-colors min-w-[72px] ${
+                      isActive ? 'text-purple-600' : 'text-gray-400 hover:text-gray-600'
+                    }`}
+                  >
+                    <AnimatePresence>
+                      {isActive && (
+                        <motion.div
+                          layoutId="nav-indicator"
+                          className="absolute inset-0 bg-purple-50 rounded-2xl"
+                          transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
+                        />
+                      )}
+                    </AnimatePresence>
+                    <Icon className="w-7 h-7 relative z-10" />
+                    <span className="text-xs font-bold relative z-10">{item.label}</span>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        </nav>
+      </div>
     </div>
   )
 }

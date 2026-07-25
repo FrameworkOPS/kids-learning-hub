@@ -1,10 +1,16 @@
 import { useState, useEffect, useCallback } from 'react'
 
-export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((prev: T) => T)) => void] {
+export function useLocalStorage<T>(
+  key: string,
+  initialValue: T,
+  migrate?: (stored: unknown) => T
+): [T, (value: T | ((prev: T) => T)) => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key)
-      return item ? (JSON.parse(item) as T) : initialValue
+      if (!item) return initialValue
+      const parsed = JSON.parse(item) as unknown
+      return migrate ? migrate(parsed) : (parsed as T)
     } catch (error) {
       console.error(`Error reading localStorage key "${key}":`, error)
       return initialValue
@@ -30,7 +36,8 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
     const handleStorage = (e: StorageEvent) => {
       if (e.key === key && e.newValue) {
         try {
-          setStoredValue(JSON.parse(e.newValue))
+          const parsed = JSON.parse(e.newValue) as unknown
+          setStoredValue(migrate ? migrate(parsed) : (parsed as T))
         } catch {
           // ignore
         }
@@ -38,7 +45,7 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
     }
     window.addEventListener('storage', handleStorage)
     return () => window.removeEventListener('storage', handleStorage)
-  }, [key])
+  }, [key, migrate])
 
   return [storedValue, setValue]
 }

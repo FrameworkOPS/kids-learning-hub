@@ -27,6 +27,7 @@ const alexPassages: ReadingPassage[] = [
       },
     ],
     kid: 'Alex',
+    difficulty: 1,
   },
   {
     id: 'alex-2',
@@ -54,6 +55,7 @@ const alexPassages: ReadingPassage[] = [
       },
     ],
     kid: 'Alex',
+    difficulty: 1,
   },
   {
     id: 'alex-3',
@@ -81,6 +83,7 @@ const alexPassages: ReadingPassage[] = [
       },
     ],
     kid: 'Alex',
+    difficulty: 2,
   },
   {
     id: 'alex-4',
@@ -108,6 +111,7 @@ const alexPassages: ReadingPassage[] = [
       },
     ],
     kid: 'Alex',
+    difficulty: 2,
   },
   {
     id: 'alex-5',
@@ -135,6 +139,7 @@ const alexPassages: ReadingPassage[] = [
       },
     ],
     kid: 'Alex',
+    difficulty: 3,
   },
 ]
 
@@ -175,6 +180,7 @@ const mayaPassages: ReadingPassage[] = [
       },
     ],
     kid: 'Maya',
+    difficulty: 1,
   },
   {
     id: 'maya-2',
@@ -207,6 +213,7 @@ const mayaPassages: ReadingPassage[] = [
       },
     ],
     kid: 'Maya',
+    difficulty: 1,
   },
   {
     id: 'maya-3',
@@ -239,6 +246,7 @@ const mayaPassages: ReadingPassage[] = [
       },
     ],
     kid: 'Maya',
+    difficulty: 2,
   },
   {
     id: 'maya-4',
@@ -276,6 +284,7 @@ const mayaPassages: ReadingPassage[] = [
       },
     ],
     kid: 'Maya',
+    difficulty: 3,
   },
 ]
 

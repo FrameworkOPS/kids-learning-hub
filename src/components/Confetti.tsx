@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 interface ConfettiPiece {
   id: number
   x: number
+  endX: number
   color: string
   delay: number
   size: number
@@ -17,14 +18,19 @@ export default function Confetti({ active, onDone }: { active: boolean; onDone?:
 
   useEffect(() => {
     if (active) {
-      const newPieces: ConfettiPiece[] = Array.from({ length: 60 }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        color: COLORS[Math.floor(Math.random() * COLORS.length)],
-        delay: Math.random() * 0.5,
-        size: Math.random() * 10 + 6,
-        rotation: Math.random() * 360,
-      }))
+      const newPieces: ConfettiPiece[] = Array.from({ length: 60 }, (_, i) => {
+        const x = Math.random() * 100
+        return {
+          id: i,
+          x,
+          endX: x + (Math.random() - 0.5) * 20,
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          delay: Math.random() * 0.5,
+          size: Math.random() * 10 + 6,
+          rotation: Math.random() * 360,
+        }
+      })
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPieces(newPieces)
       const timer = setTimeout(() => {
         setPieces([])
@@ -44,7 +50,7 @@ export default function Confetti({ active, onDone }: { active: boolean; onDone?:
             animate={{
               y: '110vh',
               rotate: p.rotation + 720,
-              x: `${p.x + (Math.random() - 0.5) * 20}vw`,
+              x: `${p.endX}vw`,
             }}
             exit={{ opacity: 0 }}
             transition={{
